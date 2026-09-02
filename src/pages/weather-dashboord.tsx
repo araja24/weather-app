@@ -1,7 +1,11 @@
 import { Button } from "@/components/ui/button"
 import { RefreshCw } from "lucide-react"
 import { useGeolocation } from "@/hooks/use-geolocation"
+
 import WeatherSkeleton from "@/components/loading-skeleton"
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
+import { AlertTriangle } from "lucide-react"
+import { MapPin } from "lucide-react"
 
 const WeatherDashboord = () => {
 
@@ -18,6 +22,37 @@ const WeatherDashboord = () => {
     return <WeatherSkeleton />;
   }
 
+  if (locationError){
+    return (
+      <Alert variant="destructive">
+        <AlertTriangle className="h-4 w-4" />
+        <AlertTitle>Location Error</AlertTitle>
+        <AlertDescription className="flex flex-col gap-4">
+          <p>{locationError}</p>
+          <Button variant="outline" onClick={getLocation} className="w-fit">
+            <MapPin className="mr-2 h-4 w-4" />
+            Enable Location
+          </Button>
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
+  if (!coordinates){
+    return (
+      <Alert variant="destructive">
+        <AlertTitle>Location Required</AlertTitle>
+        <AlertDescription className="flex flex-col gap-4">
+          <p>Please enable location to get weather data.</p>
+          <Button variant="outline" onClick={getLocation} className="w-fit">
+            <MapPin className="mr-2 h-4 w-4" />
+            Enable Location
+          </Button>
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
   return (
     <div className="space-y-4">
       {/* { fav cities} */}
@@ -29,6 +64,8 @@ const WeatherDashboord = () => {
         >
           <RefreshCw />
         </Button>
+
+        
 
       </div>
 
